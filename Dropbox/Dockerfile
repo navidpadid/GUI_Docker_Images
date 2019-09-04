@@ -1,0 +1,18 @@
+FROM ubuntu-xfce-readyalpha:latest
+LABEL maintainer="Navid Malek | navidmalek.blog.ir"
+
+# installing dropbox
+RUN sudo apt-get update && apt install -y wget
+RUN cd /home && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+
+# Set the working directory to /app
+WORKDIR /app
+# Copy the current directory contents into the container at /app
+ADD . /app
+
+ENV PROXY_SERVER=192.168.0.2
+ENV PROXY_PORT=9150
+
+COPY redsocks.conf /etc/redsocks.conf
+
+ENTRYPOINT /bin/bash run.sh 
